@@ -15,20 +15,20 @@ import org.wltea.analyzer.core.Lexeme;
 public class Main {
 
 	public static void main(String[] args) throws IOException{
-		
+		//System.out.println("helloworld");
 		Map<String,Double> idfMap = new HashMap<String, Double>();
-		Map<String, Integer> wordMap = new HashMap<String, Integer>();	//´ÊºÍĞòºÅµÄmap
+		Map<String, Integer> wordMap = new HashMap<String, Integer>();	//è¯å’Œåºå·çš„map
 		ArrayList<String> wordArrayList = new ArrayList<String>();
 		ArrayList<Integer> numPostPerTheme = new ArrayList<Integer>();
-		Map<Integer, Integer> postToThemeMap = new HashMap<Integer, Integer>();	//tfidf¾ØÕóµÄĞĞ¶ÔÓ¦µÄÖ÷Ìâ
+		Map<Integer, Integer> postToThemeMap = new HashMap<Integer, Integer>();	//tfidfçŸ©é˜µçš„è¡Œå¯¹åº”çš„ä¸»é¢˜
 		ArrayList<String> postArrayList = new ArrayList<String>();
 		
 		
-		int wordMapIndex=0;		//´ÊµÄË÷Òı½á¹¹£¬×îºóµÃµ½µÄÊÇ´ÊÊı
+		int wordMapIndex=0;		//è¯çš„ç´¢å¼•ç»“æ„ï¼Œæœ€åå¾—åˆ°çš„æ˜¯è¯æ•°
 		int countPost=0;
 		int countTheme=10;
 		//int postIndex = 0;
-		String str = "°¡²âÊÔ·Ö´Ê¹¤¾ßÒ»Ğ©Í£Ö¹´Ê";
+		String str = "å•Šæµ‹è¯•åˆ†è¯å·¥å…·ä¸€äº›åœæ­¢è¯";
 		String directory = "data\\";
 		String basketball=directory+"Basketball.txt";
 		String computer=directory+"D_Computer.txt";
@@ -45,7 +45,7 @@ public class Main {
 				warAndPeace,WorldFootball};
         
 		
-		for(int i=0;i<post.length;i++){			//µÃµ½Ò»¸ö´Ê-ĞòºÅµÄmap
+		for(int i=0;i<post.length;i++){			//å¾—åˆ°ä¸€ä¸ªè¯-åºå·çš„map
 			File file = new File(post[i]);
 			Scanner input = new Scanner(file);
 			int postPerTheme=0;
@@ -79,7 +79,7 @@ public class Main {
 			for(int j = 0;j<wordMapIndex;j++)
 				tfidfMatrix[i][j] = 0;
 		
-		for(int i = 0;i<postArrayList.size();i++){		//µÃµ½Ò»¸ö´ÊÆµÊıµÄ¾ØÕó¡£
+		for(int i = 0;i<postArrayList.size();i++){		//å¾—åˆ°ä¸€ä¸ªè¯é¢‘æ•°çš„çŸ©é˜µã€‚
 			String string = postArrayList.get(i);
 			StringReader reader = new StringReader(string);
 			IKSegmenter ik = new IKSegmenter(reader, true);
@@ -92,7 +92,7 @@ public class Main {
 		}
 		
 		
-		for(int j=0;j<wordMapIndex;j++){			//µÃµ½Ã¿¸ö´ÊÔÚ¶àÉÙ¸öÌû×ÓÖĞ³öÏÖ¹ı£¬ÒÔÓÃÀ´¼ÆËãidfµÄÖµ¡£
+		for(int j=0;j<wordMapIndex;j++){			//å¾—åˆ°æ¯ä¸ªè¯åœ¨å¤šå°‘ä¸ªå¸–å­ä¸­å‡ºç°è¿‡ï¼Œä»¥ç”¨æ¥è®¡ç®—idfçš„å€¼ã€‚
 			String word = wordArrayList.get(j);
 			if(!idfMap.containsKey(word)){
 				idfMap.put(word, 0.0);
@@ -108,7 +108,7 @@ public class Main {
 		Set<String> set = idfMap.keySet();
 		
 		Iterator<String> iterator = set.iterator();
-		while(iterator.hasNext()){		//¼ÆËãÃ¿¸ö´ÊµÄidfÖµ
+		while(iterator.hasNext()){		//è®¡ç®—æ¯ä¸ªè¯çš„idfå€¼
 			String word = iterator.next();
 			
 			double d = idfMap.get(word).doubleValue();
@@ -118,19 +118,21 @@ public class Main {
 			
 		}
 		/*
-		 * 	10½»²æÑéÖ¤
+		 * 	10äº¤å‰éªŒè¯
 		 * 	
 		 */
-		ArrayList<Double> correctNumNBD = new ArrayList<Double>();
-		ArrayList<Double> correctNumNBCD = new ArrayList<Double>();
-		ArrayList<Double> correctNumNBCG = new ArrayList<Double>();
+		
+		ArrayList<Double> correctNumLR = new ArrayList<Double>();
+		
 		
 		for(int k = 0;k<10;k++){				
+			
 			Map<Integer, Integer> testPostThemeMap = new HashMap<Integer, Integer>();
 			Map<Integer, Integer> trainPostThemeMap = new HashMap<Integer, Integer>();
 			
 			Map<Integer, Integer> testThemePostNumMap = new HashMap<Integer, Integer>();
 			Map<Integer, Integer> trainThemePostNumMap = new HashMap<Integer, Integer>();
+			
 			
 			int testTotalPost = countPost/10;
 			int trainTotalPost = countPost-testTotalPost;
@@ -139,7 +141,7 @@ public class Main {
 			int flagTrainRow = 0;
 			double[][] testMatrix = new double[testTotalPost][wordMapIndex];
 			for(int i = 0;i<countPost;i++){		
-				if((i%10)==k){			//²âÊÔ¼¯
+				if((i%10)==k){			//æµ‹è¯•é›†
 					for(int j = 0;j<wordMapIndex;j++){
 						
 						testMatrix[flagTestRow][j] = tfidfMatrix[i][j];  
@@ -157,7 +159,7 @@ public class Main {
 					}
 					flagTestRow++;
 				}
-				else{					//ÑµÁ·¼¯
+				else{					//è®­ç»ƒé›†
 					for(int j = 0;j<wordMapIndex;j++){
 						trainMatrix[flagTrainRow][j] = tfidfMatrix[i][j];
 					}
@@ -175,40 +177,42 @@ public class Main {
 				}
 			}
 			
-			//¼ÆËãNBD
 			
-			
+			System.out.println("å‡†å¤‡ç¬¬"+k+"æ¬¡é€»è¾‘å›å½’è¿ç®—");
+			LogisticRegression lr = new LogisticRegression(countPost, wordMapIndex, countTheme);
+			for(int index=0;index<countTheme;index++){
+				int value = trainThemePostNumMap.get(index);
+				lr.setNumPerTheme(value);
+			}
+			lr.trainLogRegres(trainMatrix);
+			double sumLR = 0;
+			for(int i=0;i<testTotalPost;i++){
+				int classTheme = lr.classify(testMatrix[i]);
+				int realTheme = testPostThemeMap.get(i).intValue();
+				if(classTheme==realTheme)
+					sumLR += 1.0;
+			}
+			double correctRatio = sumLR/testTotalPost;
+			correctNumLR.add(correctRatio);
+			System.out.println("ç¬¬"+k+"æ¬¡å‡†ç¡®ç‡ä¸ºï¼š"+correctRatio);
 		}
-		double sumNBD = 0;
-		double sumNBCD = 0;
-		double sumNBCG = 0;
-		for(int i = 0;i<correctNumNBD.size();i++){
-			sumNBD = sumNBD+ correctNumNBD.get(i);
-			sumNBCD = sumNBCD + correctNumNBCD.get(i);
-			sumNBCG = sumNBCG + correctNumNBCG.get(i);
+		double sumLR = 0;
+		for(int i = 0;i<correctNumLR.size();i++){
+			sumLR += correctNumLR.get(i);
 		}
+		double averageLR = sumLR/correctNumLR.size();
+		sumLR = 0;
+		for(int i=0;i<correctNumLR.size();i++){
+			double v = correctNumLR.get(i);
+			sumLR += (v-averageLR)*(v-averageLR);
+		}
+		double variance = sumLR/correctNumLR.size();
 		
-		double averageNBD = sumNBD/correctNumNBD.size();
-		double averageNBCD = sumNBCD/correctNumNBD.size();
-		double averageNBCG = sumNBCG/correctNumNBD.size();
-		sumNBD = 0;
-		sumNBCD = 0;
-		sumNBCG = 0;
-		for(int i = 0;i<10;i++){
-			double v1=correctNumNBD.get(i);
-			double v2 = correctNumNBCD.get(i);
-			double v3 = correctNumNBCG.get(i);
-			sumNBD = sumNBD + (v1-averageNBD)*(v1-averageNBD);
-			sumNBCD = sumNBCD + (v2-averageNBCD)*(v2- averageNBCD);
-			sumNBCG = sumNBCG + (v3-averageNBCG)*(v3-averageNBCG);
-		}
-		double varianceNBD = sumNBD/correctNumNBD.size();
-		double varianceNBCD = sumNBCD/correctNumNBD.size();
-		double varianceNBCG = sumNBCG/correctNumNBD.size();
-		System.out.println("NBD Æ½¾ùÖµÎª"+averageNBD+",·½²îÎª "+varianceNBD);
-		System.out.println("NBCD Æ½¾ùÖµÎª"+averageNBCD+",·½²îÎª "+varianceNBCD);
-		System.out.println("NBCG Æ½¾ùÖµÎª"+averageNBCG+",·½²îÎª "+varianceNBCG);
-		System.out.println("--ÔËËãÍê³É--");
+		System.out.println("NBD å¹³å‡å€¼ä¸º"+averageLR+",æ–¹å·®ä¸º "+variance);
+
+		System.out.println("--è¿ç®—å®Œæˆ--");
+		
 		
 	}
+	
 }
