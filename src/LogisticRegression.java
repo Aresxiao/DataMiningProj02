@@ -49,7 +49,9 @@ public class LogisticRegression {
 					double error = 0;
 					if((k>=flagRow)&&k<(flagRow+numPost)){
 						error = 1-out;
+						
 					}
+					
 					else {
 						error=0-out;
 					}
@@ -62,6 +64,7 @@ public class LogisticRegression {
 			flagRow = flagRow+numPost;
 		}
 	}
+	
 	public double innerProduct(double[] w,double[] f){		//计算两个向量的乘积
 		double sum=0;
 		for(int i=0;i<w.length;i++)

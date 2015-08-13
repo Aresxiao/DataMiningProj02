@@ -92,6 +92,7 @@ public class Main {
 		}
 		
 		
+		
 		for(int j=0;j<wordMapIndex;j++){			//得到每个词在多少个帖子中出现过，以用来计算idf的值。
 			String word = wordArrayList.get(j);
 			if(!idfMap.containsKey(word)){
@@ -105,6 +106,8 @@ public class Main {
 			idfMap.put(word, sum);
 		}
 		
+		
+		
 		Set<String> set = idfMap.keySet();
 		
 		Iterator<String> iterator = set.iterator();
@@ -117,6 +120,9 @@ public class Main {
 			idfMap.put(word, d);
 			
 		}
+		
+		
+		
 		/*
 		 * 	10交叉验证
 		 * 	
